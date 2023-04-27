@@ -2,7 +2,6 @@ import { useState } from "react";
 import socket from "./socket";
 import ConnectionState from "./components/ConnectionState";
 import Messages from "./components/Messages";
-import MyForm from "./components/MyForm";
 
 function App() {
   const [isConnected, setIsConnected] = useState(socket.connected);
@@ -27,7 +26,6 @@ function App() {
   return (
     <div className="App">
       <ConnectionState isConnected={isConnected} />
-      <MyForm />
       <Messages events={messages} />
     </div>
   );

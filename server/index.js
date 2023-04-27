@@ -22,9 +22,14 @@ app.get("/", (_req, res) => {
 });
 
 io.on("connection", (socket) => {
-  socket.on("frontendToBackend", (msg) => {
+  socket.on("frontendToBackend", (info) => {
+    const msg = info.data.text;
     if (msg.indexOf("/users") !== 0) {
-      io.emit("backendToFrontend", `Message from frontend: ${msg}`);
+      io.emit("backendToFrontend", {
+        author: "them",
+        type: "text",
+        data: { text: `Message from frontend: ${msg}` },
+      });
     } else {
       openai
         .createChatCompletion({
@@ -40,7 +45,13 @@ io.on("connection", (socket) => {
         })
         .then((completion) => {
           completion.data.choices.forEach((choice) => {
-            io.emit("backendToFrontend", choice.message.content);
+            io.emit("backendToFrontend", {
+              author: "them",
+              type: "text",
+              data: {
+                text: choice.message.content,
+              },
+            });
           });
         });
     }
